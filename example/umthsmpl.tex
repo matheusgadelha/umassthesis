@@ -105,39 +105,45 @@
 %% One way of formatting the epigraph/frontispiece is to use this package.
 %\usepackage{epigraph}
 
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{mathtools}
+\usepackage{xspace}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 \begin{document}
 
 %%
 %% You must fill in all of these appropriately
-\title{On the predilection of sheep for grass\protect\\A really long
-  title\protect\\with multiple lines}
-\author{I. M. Woolly}
-\date{February 1995} % The date you'll actually graduate -- must be
+\title{3D Shape Understanding and Generation}
+\author{Matheus Gadelha}
+\date{April 2020} % The date you'll actually graduate -- must be
                      % February, May, or September
-\copyrightyear{1995}
-\bachelors{B.Sc.}{University of Woolloomooloo}
-\masters{M.Sc.}{University of Back of Bourke}
-\secondmasters{M.Ed.}{Antioch College}
-\priordoctorate{M.D.}{University of Never-never-land}
+\copyrightyear{2020}
+\bachelors{B.Sc.}{Universidade Federal do Rio Grande do Norte}
+\masters{M.Sc.}{Universidade Federal do Rio Grande do Norte}
 % \committeechair{B. B. Bahh}
-\cochairs{B. B. Bahh}{I. M. A. Wolf}
-\firstreader{Little Bo Peep}
-\secondreader{R. U. Sheepish}
-\thirdreader{Bill Shepherd}
-\fourthreader{Mary Lamb}   % Optional
+\committeechair{Rui Wang}
+\firstreader{Subhransu Maji}
+\secondreader{Evangelos Kalogerakis}
+\thirdreader{Duygu Ceylan}
 %\fifthreader{}            % Optional
 %\sixthreader{}            % Optional
-\departmentchair[Chair of the Faculty]{Pete Shearer} % Default uses "Department Chair" as the title. To
+\departmentchair[Chair]{James Allan} % Default uses "Department Chair" as the title. To
 % use an alternate title, such as "Chair", use \departmentchair[Chair]{Pete Shearer}
 % CICS uses "Chair of the Faculty" as of 2019.
-\departmentname{Sheep Studies}
+\departmentname{College of Information and Computer Sciences}
 
 %% If your degree is something other than a Ph.D. (for a dissertation), or
 %% an M.S. (for a thesis), you will need to uncomment the appropriate
 %% following line:
 %%
 %% \degree{Doctor of Education}{Ed.D.}
-%% \degree{Doctor of Philosophy}{Ph.D.}
+\degree{Doctor of Philosophy}{Ph.D.}
 %%
 %% \degree{Master of Arts}{M.A.}
 %% \degree{Master of Arts in Teaching}{M.A.T.}
@@ -147,7 +153,7 @@
 %% \degree{Master of Landscape Architecture}{M.L.A.}
 %% \degree{Master of Music}{M.M.}
 %% \degree{Master of Public Administration}{M.P.A.}
-\degree{Master of Public Health}{M.P.H.}
+%% \degree{Master of Public Health}{M.P.H.}
 %% \degree{Master of Regional Planning}{M.R.P.}
 %% \degree{Master of Science}{M.S.}
 %% \degree{Master of Science in Accounting}{M.S. Acctg.}
@@ -174,11 +180,11 @@
 
 %%
 %% Dedication is optional -- but this is how you create it
-\begin{dedication}              % Dedication page
-  \begin{center}
-    \emph{To those little lost sheep.}
-  \end{center}
-\end{dedication}
+%\begin{dedication}              % Dedication page
+%  \begin{center}
+%    \emph{To those little lost sheep.}
+%  \end{center}
+%\end{dedication}
 
 %%
 %% Epigraph (aka frontispiece) is also optional, but this is one way you
@@ -217,15 +223,18 @@
 
 %%
 %% Acknowledgements are optional...yeah, right.
-\chapter{Acknowledgments}             % Acknowledgements page
-  Thanks to all those fine shepherds. Not to mention all the great
-  border collies and suchlike fine animals.
+%\chapter{Acknowledgments}             % Acknowledgements page
+%  Thanks to all those fine shepherds. Not to mention all the great
+%  border collies and suchlike fine animals.
 
 %%
 %% Abstract is MANDATORY. -- Except for MS theses
 \begin{abstract}                % Abstract
-  Sheep like grass.  Why?  Let me tell you.  Sheep are ruminants, like
-  cattle, deer, and horses.  They have stomachs that are specialized...
+
+In recent years, Machine Learning techniques have revolutionized solutions to longstanding image-based problems,  like image classification, generation, semantic segmentation, object detection and many others.  However, if we want to be able to build agents that can successfully interact with the real world, those techniques need to be capable of reasoning about the world as it truly is: a tridimensional space. There are two main challenges while handling 3D information in machine learning models. First, it is not clear what is the best 3D representation for machine learning models. For images, convolutional neural networks (CNNs) operating on raster images yield the best results in virtually all image-based benchmarks. For 3D data, the best combination of model and representation is still an open question. Second, 3D data is not available on the same scale as images – taking pictures is a common procedure in our daily lives, whereas capturing 3D content is an activity usually restricted to specialized professionals.. This thesis is focused on addressing both of these issues. Which model and representation should we use for generating and recognizing 3D data? What are efficient ways of learning 3D representations from a few examples? Is it possible to leverage image data to build models capable of reasoning about the world in 3D?
+
+Our research findings show that it is possible to build models that efficiently generate 3D shapes as unstructured representations. Those models require significantly less memory while generating higher quality shapes than the ones based on voxels and multi-view representations. We start by developing techniques to generate shapes represented as point clouds. This class of models leads to high quality reconstructions and better unsupervised feature learning. However, since point clouds are not amenable to editing and human manipulation, we also present models capable of generating shapes as sets of shape handles -- simpler primitives that summarize complex 3D shapes and were specifically designed for high-level tasks and user manipulation. Despite their effectiveness, those approaches require some form of 3D supervision, which is scarce. We present multiple alternatives to this problem. First, we investigate how approximate convex decomposition techniques can be used as self-supervision to improve recognition models when only a limited number of labels are available. Second, we study how neural network architectures induce shape priors that can be used in multiple reconstruction tasks -- using both volumetric and manifold representations. In this regime, reconstruction is performed from a single example -- point cloud or multiple silhouettes. Finally, we demonstrate how to train generative models of 3D shapes without using any 3D supervision by combining differentiable rendering techniques and Generative Adversarial Networks.
+
 \end{abstract}
 
 %%
@@ -252,8 +261,9 @@
 %%
 %% If you want an introduction, which is not a numbered chapter, insert
 %% the following two lines.  This is OPTIONAL:
-\unnumberedchapter{Introduction}
-Why on earth do I want to study sheep anyway?
+\include{symbol}
+\input{intro.tex}
+\input{PCAGAN/pcagan.tex}
 
 %%
 %% Some sample text
@@ -493,7 +503,7 @@ erat.
 %% A bibliography is required.
 \interlinepenalty=10000  % prevent split bibliography entries
 \bibliographystyle{umassthesis}
-\bibliography{umthsmpl}
+\bibliography{umthsmpl,PCAGAN/egbib}
 \end{document}
 
 %%% Local Variables: 

@@ -1,0 +1,48 @@
+\section{Related Work}
+A number of approaches have studied 3D shape recognition and generation using uniform 3D voxel grids~\cite{choy20163d,wu20153d,Huang:PCL,voxnet,BrockLRW16,3dgan}.
+However, uniform grids have poor scalability and require large memory footprint, hence existing networks built upon them often operate on a relatively low-resolution grid. 
+Several recent works address this issue through multiscale and sparse representations~\cite{Riegler2017CVPR,tatarchenko2017octree,ocnn,hie3dcnn,splatnet,graham17sparse} at the expense of additional book keeping. 
+Still, voxel-based methods generally incur high processing cost, and are not well suited for modeling fine surface details. 
+Moreover, it's not clear how to incorporate certain geometric attributes, like surface normals, into voxel representation, since these attributes do not exist in the interior of the shape.
+
+
+
+
+Multiview methods~\cite{mvcnn,qi2016volumetric,Soltani17,LunGKMW17,kalogerakis20173d} represent a 3D shape as images rendered from different viewpoints. 
+These methods use efficient convolutional and pooling operations and leverage deep networks pretrained on large labeled image datasets.
+However, they are not optimal for general shapes with complex interior structures due to self occlusions.
+Nonetheless since most models on existing shape repositories are described well by their exterior surface, view-based approaches have been adapted
+for shape classification and segmentation tasks. 
+Recently they have also been used for generation where a set of depth and normal maps from different viewpoints are inferred using image-based networks, and have been successfully used for image to shape generation tasks~\cite{LunGKMW17,lin2018learning}.
+However such approaches requires subsequent processing to resolve view inconsistencies and outliers which is a challenging task.
+
+Previous work has also studied extensions of ConvNets to mesh surfaces such as spectral CNNs~\cite{bruna:spectral,Yi:SyncSpec:2017}, geodesic CNNs~\cite{masci:gcnn}, or anisotropic CNNs~\cite{Boscaini2016LearningSC}. They have shown success for local correspondence and matching tasks. However, some of these methods are constrained on manifold surfaces, and generally it's unclear how well they perform on shape generation tasks.
+A recent work in~\cite{SimonovskyK17} generalized the convolution operator from regular grid to arbitrary graphs while avoiding the spectral domain, allowing graphs of varying size and connectivity. 
+
+Another branch of recent works focused on processing shapes represented as point clouds. One example is PointNet~\cite{pointnet,pointnet2}, that directly consumes point clouds as input. The main idea is to first process each point identically and independently, then leverage a symmetric function (max pooling) to aggregate information from all points. The use of max pooling preserves the permutation invariance of a point set, and the approach is quite effective for shape classification and segmentation tasks. Similarly, KD-net~\cite{Klokov_2017_ICCV} operates directly on point cloud shapes. It spatially partitions a point cloud using a kd-tree, and imposes a feed-forward network on top of the tree structure. This approach is scalable, memory efficient, achieves competitive performance on shape recognition tasks. 
+While successful as encoders, it hasn't been shown how these networks can be employed as decoders for shape generation tasks.
+
+
+
+Generating shapes as a collection of points without intermediate modeling of view-based depth maps has been relatively unexplored in the literature.
+The difficulty stems from the lack of scalable approaches for generating sets.
+Two recent works are in this direction.
+Fan et al.~\cite{fan2016point} train a neural network to generate point clouds from a single image by minimizing Earth Mover's Distance (EMD) or Chamfer distance (CD) between the generated points and the model points. These distances are order invariant and hence can operate directly on point sets. 
+This approach uses a two-branched decoder, one branch is built with 2D transposed convolutions and the other one is composed by fully connected layers.
+On the other hand, our approach uses a simpler and shallower decoder built as a composition of 1D deconvolutions that operate at multiple scales.
+This representation improves information flow across scales, which leads to higher quality generated shapes. 
+Moreover, we use permutation invariant losses along with regularization of latent variables to build a model similar to a variational autoencoder~\cite{vae}
+that can be used to sample shapes from gaussian noise.
+Another work in~\cite{Gadhela:2017:3DSG} learns a distribution over shape coefficients using a learned basis for a given category using a generative adversarial network~\cite{goodfellow2014generative}. 
+However, in this approach, the underlying generative model assumes a linear shape basis, which produces less detailed surfaces. 
+The improved scalability of our method allows generating shapes with more points and more accurate geometric details in comparison to previous work.
+
+
+
+
+Our tree network builds on the ideas of multiscale~\cite{he2014spatial,lin2016fpn}, mutligrid~\cite{multigrid} and dilated~\cite{yu2015multi} or atrous filters~\cite{dutilleux1990implementation,chen2016deeplab} effective for a number of image recognition tasks. 
+They allow larger receptive fields during convolutions with a modest increase in the number of parameters.
+In particular Ke et al.~\cite{multigrid} showed that communication across multiresolutions of an image throughout the network leads to improved convergence and better accuracy on a variety of tasks.
+Our approach provides an efficient way of building multigrid-like representations for 3D point clouds.
+
+

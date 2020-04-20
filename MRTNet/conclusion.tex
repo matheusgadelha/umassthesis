@@ -1,0 +1,10 @@
+\section{Conclusion}
+
+In conclusion, we introduced multiresolution tree networks (\mrtnet) for point cloud processing. They are flexible and can be used for shape classification, generation, and inference tasks. Our key idea is to represent a shape as a set of locality-preserving 1D ordered list of points at multiple resolutions, allowing efficient 1D convolution and pooling operations. 
+The representation improves information flow across scales, enabling the network to perform coarse-to-fine analysis, leading to faster convergence during training
+and higher quality for shape generation. 
+
+In future work, we would like to incorporate additional point attributes, such as normal and color, into the network, 
+to further improve accuracy of shape recognition and allow the shape generator to produce these attributes. 
+We would also like to apply 
+and extend the method to process spatio-temporal shape analysis, such as on animated shapes or other temporarlly changing 3D point data.
