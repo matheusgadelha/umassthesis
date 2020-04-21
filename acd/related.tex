@@ -1,0 +1,131 @@
+%Our approach builds on advances in neural network architectures for learning 3D representations, geometric algorithms to decompose 3D shapes into parts, self-supervision, and metric learning approaches to learn local and global shape representation that facilitate downstream classification and segmentation tasks. Here, we briefly describe the relevant work in these areas.
+
+
+% ------------------------------------------------------------
+\noindent\textbf{Learning Representations on 3D data.}
+Shape representations using neural networks have been widely studied in the
+field of computer graphics and computer vision. 
+%A large body of existing methods focus on two types of
+%architectures -- those that adopt ordered 3D representation as input, such as 3D
+%voxels, multiview images, and those that adopt unordered data like point clouds and meshes. 
+Occupancy grids have been used to represent shape for classification and segmentation
+tasks~\cite{maturana2015voxnets}; however it suffered from issues of computational and memory efficiency,
+which were later circumvented by architectures using spatial partitioning data structures~\cite{riegler2017octnet,klokov2017escape,wang2017ocnn,Wang:2018:AOP}.
+Multi-view approaches~\cite{Huang:2017:LMVCNN,Tat2018,kalogerakis2017shapepfcn} learn representations 
+by using order invariant pooling of features from multiple rendered views of a shape. 
+%Recent advances in graph processing have also lead to mesh-based neural
+%networks~\cite{feng2018meshnet,MeshCNN} that learn hierarchical
+%features over increasingly down-sampled vertices by adaptively collapsing them.
+Another class of methods take a point cloud representation (\ie a set of $(x, y, z)$ co-ordinates) as input, and learn permutation 
+invariant representations~\cite{wang2019dynamic,mrt18,qi2017pointnet,qi2017pointnetpp,yang2019pointflow,hassani2019unsupervised}. 
+%In this work, we are focused on models that learn from unordered point clouds.
+Point clouds are a compact 3D representation that does not suffer from the memory constraints
+of volumetric representations nor the visibility issues of multi-view approaches.
+%Besides, 3D sensors' outputs can be trivially converted to point clouds.
+However, all these approaches rely on massive amounts of labeled 3D data. 
+In this paper, we focus on developing a technique to allow label-efficient representation learning of point clouds.
+Our approach is architecture-agnostic and relies on learning approximate convex decompositions, which
+can be automatically computed from a variety of shape representations without any human intervention.
+
+% ------------------------------------------------------------
+\vspace{2mm}
+\noindent\textbf{Approximate Convex Decompositions.} 
+%We refer to shape decomposition as a procedure that computes a set of simpler proxy-shapes from
+%complex ones.
+%Such procedures have been extensively studied in the geometric processing literature and they operate without
+%resorting to any learning-based technique or human annotated labels -- multiple
+%methods have shown that complex shapes can be reliably decomposed relying solely on geometric cues.
+%Biederman's recognition-by-components theory~\cite{biederman1987recognition} attempts to explain object recognition in humans by the ability to assemble basic shapes such as cylinders and cones, called \textit{geons}, into the complex objects encountered in the visual world.
+%Classical approaches in computer vision have modeled three-dimensional shapes as a composition of simpler primitives, \eg work by Binford~\cite{binford1987bayesian,binford1971visual} and
+%Marr~\cite{marr1978representation}. 
+%% \llcao{I like Marr and Binford's work,but note that a lot applications are 3D reconstruction from 2D images, so probably not very relevant to ``shape decomposition"? You may consider to remove some references to make the paper more focused.}
+%More recent work in geometric processing has developed shape decomposition techniques that generate
+%different types of primitives which are amenable to tasks like editing, grasping, tracking and animation.
+%Those have explored primitives like 3D curves~\cite{gsmc_iwires_sig_09,mzlsgm_abstraction_siga_09,Gori2017},
+%cages~\cite{obbcage}, sphere-meshes~\cite{spheremesh} and generalized cylinders~\cite{gdc}.
+%In this work we employ a decomposition technique that approximates shapes as a collection of convex parts.
+Early cognitive science literature has demonstrated that humans tend to reason about 3D shapes as a union
+of convex components~\cite{hoffman1983parts}. 
+However, performing exact convex decomposition is a NP-Hard problem that leads to an undesirable high number of
+components on realistic shapes~\cite{ecd}.
+Thus, we are interested in a particular class of decomposition techniques named \emph{Approximate Convex Decomposition} (ACD)~\cite{acd,minimumncd,acanalysis,vhacd},
+which compute components that are approximately convex -- 
+up to a concavity tolerance $\epsilon$.
+This makes the computation significantly more efficient and leads to shape approximations containing
+a smaller number of components.
+These approximations are useful for a variety of tasks, like mesh generation~\cite{acd} and collision detection~\cite{collisiondetection}.
+ACDs are also an important step in non-parametric shape segmentation methods~\cite{acanalysis,concavityaware}.
+Furthermore, ACD is shown to have a low rand-index compared to human segmentations in the PSB benchmark~\cite{acanalysis}, which
+indicates that it is a reasonable proxy for our intuitions of shape parts.
+In this work, we used a particular type of ACD named Volumetric Hierachical Approximate Convex Decomposition (V-HACD)~\cite{vhacd}
+-- details in Section~\ref{sec:acd}.
+Differently from non-parametric approaches, our goal is to use ACD as a self-supervisory task
+to improve point cloud representations learned by deep neural networks.
+We show not only that the training signal provided by ACD leads to improvements in semantic segmentation, but also to
+unsupervised shape classification.
+
+% ------------------------------------------------------------
+\noindent\textbf{Self-supervised learning.}
+% Further improvement in recognition performance requires tremendous annotation efforts in increasing the labeled dataset volume, which is impractical, labor intensive and does not scale well. Therefore, exploring ways and means to exploit unlabeled data has become an attractive alternative.
+% Label-efficient methods of training object recognition models, using mixtures of labeled and unlabeled data, have a long history in computer vision~\cite{blum1998combining,chapelle2009semi,westonlarge,rosenberg2005semi,weber2000unsupervised,baluja1999probabilistic,selinger2001minimally,levin2003unsupervised,fergus2003object}. Please refer to \cite{chapelle2009semi} for a detailed survey of the field.
+In many situations, unlabeled images or videos themselves contain information which can be leveraged to provide a training loss to learn useful representations. Self-supervised learning explores this line of work, utilizing unlabeled data to train deep networks by solving 
+proxy tasks that do not require any human annotation effort, such as predicting data transformations~\cite{noroozi2016unsupervised,gidaris2018unsupervised,noroozi2018boosting} 
+or clustering~\cite{caron2018deep,caron2019unsupervised}. 
+%
+Learning to colorize grayscale images was among the first  approaches to training modern
+deep neural networks in a self-supervised fashion~\cite{larsson2016learning,zhang2016colorful,zhang2017split} -- being able to predict the correct color for an image requires some understanding of 
+a pixel's semantic meaning (\eg skies are blue, grass is green etc.), leading to 
+learning representations useful in downstream tasks like object classification. 
+The contextual information in an image also lends itself to the design of proxy 
+tasks -- learning to predict the relative positions of cropped image patches as 
+in Doersch~\etal~\cite{doersch2015unsupervised}, similarity of patches tracked 
+across videos~\cite{wang2015unsupervised,wang2017transitive}, inpainting a 
+missing patch in an image by leveraging the context from the rest of the image~\cite{pathak2016context,trinh2019selfie}. Motion from unlabeled videos 
+also provides a useful pre-training signal, as shown in Pathak~\etal~\cite{pathak2017learning} using motion segmentation, and
+Jiang~\etal~\cite{jiang2018self} who predict relative depth as pre-training 
+for downstream scene understanding tasks. 
+Other approaches include solving jigsaw puzzles 
+with permuted image patches~\cite{noroozi2016unsupervised} and training a 
+generative adversarial model~\cite{donahue2019large}. An empirical comparison of 
+various self-supervised tasks may be found in \cite{goyal2019scaling,kolesnikov2019revisiting}. 
+In the case of limited samples \ie the \textit{few-shot classification} setting,
+including self-supervised losses along with the usual supervised training is shown 
+to be beneficial in Su~\etal~\cite{su2019does}. 
+Recent work has also focused on learning unsupervised representations for 
+3D shapes using tasks such as clustering~\cite{hassani2019unsupervised} and 
+reconstruction~\cite{sharma2016vconv,yang2018foldingnet}, which we  
+compare against in our experiments.
+% \llcao{The reviewer may be confused why these existing self-supervised learning methods cannot be used in this paper. They may become suspicious when seeing your experiments have not compare with any self-supervised learning method.} 
+% \arc{we do compare with self-sup methods that were developed for 3D -- Tables 1 and 3}
+
+%MATHEUS: I added representation so the citation wouldn't overflow the line
+\noindent\textbf{Label-efficient representation learning on point clouds.}
+Several recent approaches \cite{Muralikrishnan18,cosegnetChenyang,hassani2019unsupervised,chen2019bae,SharmaPEN} have been proposed to
+alleviate expensive labeling of shapes. Muralikrishnan \etal~\cite{Muralikrishnan18} learn per-point representation by training the
+network to predict shape-level tags. Yi et al.~\cite{Yi:2017:LHS}
+embeds pre-segmented parts in descriptor space by jointly learning a
+metric for clustering parts, assigning tags to them, and building a
+consistent part hierarchy. Another direction of research is to
+utilize noisy/weak labels for supervision.
+Chen \etal~\cite{chen2019bae} proposed a branched auto-encoder, where each branch
+learns coarse part level features, which are further used to
+reconstruct the shape by producing implicit fields for each part.
+However, this approach requires one decoder for every different part, which
+restricts their experiments to category-specific models.
+On the other hand, our approach can be directly applied to any of the well known
+point-based architectures, being capable of handling multiple categories at once
+for part segmentation and learning state-of-the-art features for unsupervised shape classification.
+Furthermore, \cite{chen2019bae} shows experiments on single shot semantic segmentation on manually
+selected shapes, whereas we show results on randomly selected training
+shapes in few-shot setting.
+Most similar to our work, Hassani \etal~\cite{hassani2019unsupervised} propose a novel architecture for
+point clouds which is trained on multiple tasks at the same time: clustering, classification and reconstruction.
+In our experiments, we demonstrate that we outperform their method on few-shot segmentation by $\mathbf{7.5\%}$ IoU and
+achieve the same performance on unsupervised ModelNet40 classification by using \emph{only ACD as a proxy task}.
+If we further add a reconstruction term, our method achieves state-of-the-art performance in unsuperivsed shape classification.
+Finally, Sharma \etal~\cite{SharmaPEN} proposed learning point embedding by utilizing noisy
+part labels and semantic tags available freely on a 3D warehouse
+dataset. The model learnt in this way is used for a few-shot semantic
+segmentation task. 
+In this work, we instead get part labels using approximate convex decomposition, whose computation is completely
+automatic and can be applied to any mesh regardless of the existence of semantic tags.

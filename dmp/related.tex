@@ -1,0 +1,70 @@
+\section{Related Work}
+\paragraph*{Manifold 3D shape generation}
+3D shape generation is an active area of research with methods that
+generate 3D shapes as volumetic representations such as occupancy grids~\cite{choy20163d, 3dgan, prgan, drcTulsiani17, tatarchenko2017octree, hie3dcnn, matryoshka}, 
+signed distance functions~\cite{chen2019learning,mescheder2019occupancy,genova2019learning,park2019deepsdf}, mutliview depth and normals~\cite{LunGKMW17, Soltani17, tatarchenko2016multi, lin2018learning}, or point clouds~\cite{pcagan, fan2016point, latentpc, mrt18}.
+Our work is closely related to techniques for generating 3D shapes
+through a
+predefined connectivity or parametrization structure over the surface of the shape. 
+Pixel2Mesh~\cite{pixel2mesh} utilizes graph convolutional
+networks to generate meshes that are homeomorphic to a sphere.
+AtlasNet~\cite{atlasnet} and
+FoldingNet~\cite{yang2018foldingnet} learn a parametrization of a
+surface by adopting deep networks to transform
+point coordinates in a 2D plane to the shape surface.
+Specifically, each point is generated as $\big(f^1_{\theta}(x),f^2_{\theta}(x),f^3_{\theta}(x)\big)$
+where $f^i_\theta$ is a deep network and $x=(x_1,x_2)$ is a point
+in the unit grid.
+Alternate approaches~\cite{chen2019learning,mescheder2019occupancy,genova2019learning,park2019deepsdf} represent the surface as the level-set of
+a scalar field, $f(x) = 0, x\in \mathbb{R}^3$, e.g., of the
+signed distance function.
+While these have been applied for shape generation by training on 3D shape datasets, our goal is to analyze the role of these parameterizations as an \emph{implicit prior} for manifold denoising and interpolation tasks.
+
+
+\paragraph*{Deep implicit priors}
+Our work is related to the deep
+image prior~\cite{dip} that generates images as a
+convolutional network transformation of a random signal on a unit
+grid.
+By optimizing the randomly initialized network to minimize a reconstruction loss with respect to the noisy target, their approach was shown to yield excellent denoising results.
+Our approach generalizes this idea to manifold data, which is more appropriate for interpolating and denoising contours and surfaces  (see Figure~\ref{fig:dipcomp} for a comparison).
+Our work is also related to the recently proposed deep geometric prior~\cite{williams2019deep}.
+Their approach was used to estimate a surface from point cloud data by
+partitioning the surface into small overlapping patches and reconstructing the local manifold
+using a deep network.
+Consistency in the overlapping regions was enforced by minimizing the Earth Movers distance (EMD). 
+In contrast to their work, we learn a small collection of non-overlapping 
+parametrizations (atlas) by minimizing a regularized term and Chamfer distance, which is much more efficient than EMD.
+We also consider diverse tasks such as point cloud denoising, interpolation, and shape reconstruction across a category where the atlases needs to be consistent across instances. 
+Finally, we present a theoretical analysis of the local properties of the
+generated surface by analyzing its limiting behavior as a Gaussian
+process.
+
+\paragraph*{Embedding a manifold}
+Our work is related to techniques for embedding manifolds into a low-dimensional
+Euclidean space (\eg, IsoMap~\cite{isomap} or LLE~\cite{lle}).
+Our approach parameterizes the inverse mapping
+from the Euclidean space to the data manifold using a deep network.
+Interestingly, invertability can be guaranteed by using networks with easy to compute inverses (\eg,
+NICE~\cite{dinh2014nice} or GLOW~\cite{kingma2018glow}). 
+In computer graphics, a number of techniques have been developed for shape surface denoising and
+reconstruction.
+Screened Poisson Reconstruction~\cite{spsr} constructs an implicit surface
+on a 3D volumetric grid based on oriented point samples by solving the Poisson equation.
+Approaches based on Moving Least Squares~\cite{mls,
+  alexa2003computing, rimls} reconstruct a surface by 
+estimating an approximation of each local patch, similar to the deep geometric prior~\cite{williams2019deep} approach.
+Our approach outperforms these baselines by a significant margin (Table~\ref{tab:denoising}).
+
+\paragraph*{Deep networks and Gaussian processes} A Gaussian process (GP) is
+commonly viewed as a prior over functions. Let $T$ be an index set
+(\eg., $T \in \mathbb{R}^d$), let $\mu(t)$ be a real-valued mean
+function and $K(t,t')$ be a non-negative definite kernel or covariance
+function on T. If $f \sim GP (\mu, K )$,
+then, for any finite number of indices $t_1,...,t_n \in T$, the
+vector $(f (t_i))^n_{i=1}$ is Gaussian distributed with mean vector $(\mu(t_i ))^n_{i=1}$ and covariance matrix $(K (t_i , t_j))^n_{i,j=1}$. 
+ Neal~\cite{Neal} showed that a two-layer network with infinite number of
+ hidden units approaches a GP.
+ The mean and covariance of commonly used non-linearities have been
+ derived in  several subsequent works~\cite{williams1997computing,cho2009kernel}. We use this
+ machinery to analyze the limiting GP of deep manifold priors.

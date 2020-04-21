@@ -1,0 +1,31 @@
+\section{Conclusion and Future Work}\label{s:conclusion}
+We proposed a framework for inferring 3D shape distributions from 2D
+shape collections by augmenting a convnet-based 3D shape generator
+with a projection module. 
+This complements existing approaches for
+non-rigid SfM since these models can be trained without prior
+knowledge about the shape family, and can generalize to categories
+with variable structure.
+We showed that our models can infer 3D shapes
+for a wide range of categories, and can be used to infer shape and
+viewpoint from a silhouettes in a completely unsupervised manner.
+We believe that the idea of using a differentiable render to infer
+distributions over unobserved scene properties from images can be
+applied to other problems.
+
+A limitation is that our approach cannot directly learn
+from real-world images, as they usually have background pixels, and
+contain complex shading.
+In the future, our method can be extended to accommodate real images
+using semantic segmentation to extract foreground object from the
+background.
+In addition, it is possible to incorporate photorealistic
+differentiable rendering modules capable of handling richer surface
+colors, materials, and camera parameters.
+One could also incorporate other forms of supervision, such as
+viewpoint or coarse shape estimates, to improve the 3D shape
+inference.
+For example, camera parameters can be estimated using a generic
+viewpoint estimator~\cite{tulsiani2015pose,su2015render}.
+
+

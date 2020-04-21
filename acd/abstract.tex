@@ -1,0 +1,14 @@
+%\rui{It may be better to start the abstract with some words about label-efficient learning, since that's the driving application. Right now it sounds like ACD is the driving application.}
+The problems of shape classification and part segmentation from 3D
+point clouds have garnered increasing attention in the last few
+years. %~\cite{pointnet,qi2017pointnetpp,mrt18,su18splatnet}.  
+But both of these problems suffer from relatively small training sets, creating the need for statistically efficient methods to learn 3D shape representations. In this work, 
+we investigate the use of Approximate Convex Decompositions (ACD) as a self-supervisory signal for
+label-efficient learning of point cloud representations.
+Decomposing a 3D shape into simpler constituent parts or primitives is a fundamental problem in geometrical shape processing. 
+There has been extensive work on such decompositions, where the criterion for simplicity of a constituent shape 
+is often defined in terms of convexity for solid primitives.
+% \elm{The following two sentences do not explain what supervision ACD provides. I think you want to say something like ``ACD provides a good initial solution for segmenting point clouds that, when used as approximate ground truth, provides excellent self-supervision for training a network to do segmentation. }In this paper, we posit that such a shape decomposition task is able to provide a useful self-supervisory signal to current deep neural networks used for various discriminative tasks on 3D point cloud data, such as part segmentation and shape classification. Specifically, we show that the well-known Approximate Convex Decomposition (ACD) of a point cloud serves as excellent self-supervision, allowing a model to learn from large amounts of unlabeled point cloud data. 
+In this paper, we show that using the results of ACD to approximate a ground truth segmentation provides excellent self-supervision for learning 3D point cloud representations that are highly effective on downstream tasks. 
+We report improvements over the state-of-the-art in unsupervised representation learning on the ModelNet40 
+shape classification dataset and significant gains in few-shot part segmentation on the ShapeNetPart dataset.

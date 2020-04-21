@@ -1,0 +1,50 @@
+\section{Related work}
+\label{sec:related}
+
+In this section we briefly summarize techniques for solving inverse problems for image and volumetric reconstruction of the form:
+\begin{equation}
+\label{eqn:inverse-problems}
+\min_{\bm{x} \in {\cal X}} P(\bm{x}) + E(\bm{y}, {\cal T}(\bm{x})).
+\end{equation}
+The data term $E$ and the projection operator ${\cal T}$ are application specific, but there is considerable flexibility on modeling the prior term $P$. These include smoothness priors such as total variation (TV)~\cite{rudin1992nonlinear} and $L_0$ gradients~\cite{xu2011image}, Gaussian mixture models over patches~\cite{zoran2011learning}, denoising autoencoders~\cite{vincent2010stacked}.
+The deep image prior~\cite{ulyanov17deep} represents images as the output convolutional network with random parameters from a fixed (random) input.
+The authors showed that outputs of networks consisting of several convolutional and pooling layers, followed by several deconvolutional layers with few or no skip connections in between tend to generate natural images.
+Recently, an extension to the deep image prior shows that it is asymptotically equivalent to a Gaussian Process~\cite{bayesiandip}.
+This suggests a Bayesian approach to the problem: conducting posterior inference through Langevin dynamics avoids the need for early
+stopping and improves results for denoising and inpainting tasks.
+The deep image prior is also related to procedural priors such as bilateral filtering~\cite{tomasi1998bilateral}, non-local means~\cite{buades2005non}, or block matching 3D (BM3D)~\cite{dabov2007image}.
+These models use non-local self-similarity of patches in images to collectively denoise them.
+
+
+For complex projection operators ${\cal T}$ involving noisy and incomplete measurements $\bm{y}$, applying procedural priors is non-trivial. 
+Suppose $\bm{y}$ and $\bm{z}$ denote the observed and unobserved projection measurements corrupted by noise: $(\bm{y},\bm{z}) = T(\bm{x}) + \delta$. For example $\bm{y}$ could denote the subset of frequencies in the Fourier transform, or projections of data in a compressed sensing application. Maggioni \etal~\cite{maggioni2013nonlocal} proposed the following iterative scheme: 
+\begin{enumerate}
+\item Estimate $\bm{x}$ by inverting the measurement $\bm{x}^{(k)}={\cal T}^{-1}(\bm{y}, \bm{z}^{(k)})$ starting from $\bm{z}^{(1)}=0$.
+\item Denoise $\bm{x}^{(k)}$ using BM3D to obtain $\bm{x}^{(k+1)}$.
+\item Re-estimate $(., \bm{z}^{(k+1)}) = {\cal T}(\bm{x}^{(k+1)}) + \delta^{(k)}$. Note that only the unobserved part of projection is estimated keeping $\bm{y}$ fixed across iterations.
+\end{enumerate}
+
+The iterative BM3D can be applied to problems where the support of ${\cal Y}$ is small. 
+This procedure is related to the alternating direction method of multipliers (ADMM)~\cite{boyd2011distributed} which has been applied for solving linear inverse problems of the form: $\min_{\bm{x}} ||\bm{y}-A\bm{x}||_2^2 + \lambda P(\bm{x}).$
+ADMM solves the augmented Lagrangian ${\cal L}(\bm{x},\bm{z},\bm{u})$:
+\begin{equation}
+{\cal L}(\bm{x},\bm{z},\bm{u}) = ||\bm{y}-A\bm{z}||_2^2 + \lambda P(\bm{x}) + \frac{\rho}{2}||\bm{x} - \bm{z} + \bm{u}||_2^2 \nonumber
+\end{equation} 
+over auxiliary variables $\bm{z}$ and $\bm{u}$ for $\rho > 0$ by alternatively optimizing $\bm{x}$, $\bm{z}$, and $\bm{u}$ as:
+\begin{eqnarray}
+\bm{x}^{(k+1)} &\leftarrow& \argmin_{\bm{x}}\lambda P(\bm{x}) + \frac{\rho}{2}||\bm{x} - \bm{z}^{(k)} + \bm{u}^{(k)}||_2^2 \nonumber \\
+\bm{z}^{(k+1)} &\leftarrow& \argmin_{\bm{z}}||\bm{y}-A\bm{z}||_2^2 + \frac{\rho}{2}||\bm{x}^{(k+1)} - \bm{z} + \bm{u}^{(k)}||_2^2 \nonumber \\
+\bm{u}^{(k+1)} &\leftarrow& \bm{x}^{(k+1)} - \bm{z}^{(k+1)} + \bm{u}^{(k)} \nonumber
+\end{eqnarray}
+The optimization decouples the reconstruction and the prior. The first involves inference with an image prior and squared-loss term. The second objective is quadratic in $\mathbf{z}$ can be solved with conjugate gradient decent. The decoupling allows use of explicit or implicit priors, as well as learned proximal projection operators~\cite{yandeepadmm16,chang2017one} $\textbf{proj}(\bm{z}-\bm{u}, \rho)$ that map a vector $\bm{z}-\bm{u}$ to $\bm{x}$ in the manifold of natural images within a distance $\rho$ from it, similar to a denoising autoencoder, to solve the inverse problem.
+
+Finally, a class of approaches directly learn the inverse mapping ${\cal G}:{\cal Y} \rightarrow {\cal X}$ using rich parametric models such as a neural network in a fully-supervised manner.
+These models amortize inference during training and enable efficient inference given noisy measurements.
+Such models have been successfully applied for various inverse problems such as super resolution~\cite{dong2014learning}, denoising~\cite{xie2012image}, colorization~\cite{larsson2016learning,zhang2016colorful}, and estimating depth and normals from images~\cite{eigen2014depth}.
+However a disadvantage is the architecture and parameters of the model are likely to be specific to the noise and projection operators, which require separate training for each task.
+
+Closely related to this work, recent approaches have employed geometric transformations on deep features to generate novel views of a 3D object~\cite{hologan, deepvoxels}.
+In contrast to our approach, those techniques do not explicitly define the projection operators -- they are parameterized by a deep neural network.
+As a consequence, the inferred representation does not directly correspond to a 3D shape, but to a higher lever representation learned by the model.
+
+

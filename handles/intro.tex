@@ -1,0 +1,109 @@
+\section{Introduction}
+\label{sec:introduction}
+Dramatic improvements in quality of image generation have become a key driving force behind many novel image editing applications.
+%, such as image synthesis from semantic data (\eg., pixel labels or text), inpainting and super resolution.
+%Generative models for images have seen remarkable improvements in quality in recent years~\cite{progressivegan, stylegan, biggan, sngan} and
+%are one of the most researched fields in deep learning.
+%These models 
+%have become a central component in several image editing applications, such as 
+%semantic image synthesis~\cite{spade,pix2pixhd,pix2pix},
+%image inpainting~\cite{deepfillv1,deepfillv2,partconv}, 
+%super-resolution~\cite{srgan,esrgan} and
+%text-based image generation~\cite{stackgan,attngan,zhang2018cvpr}.
+Yet, similar approaches are lacking for editing and generating 3D shapes.
+There are two related challenges.
+%It would be certainly desirable to extend such success to 3D shapes as well. 
+%Unfortunately, editing and generating 3D geometry is a significantly harder problem.
+%The task is challenging for a number of reasons.
+First, learning generative models for 3D data is challenging, as unlike images, high-quality 3D data is hard to obtain and the data is high dimensional and often unstructured.
+%%\radomir{and in most cases what matters is the shape of the 3D surface and not what is inside or outside, which in 2D is closer to vector art than images)}, increasing the complexity of the networks. 
+%Second, high-quality 3D data is harder to obtain. 
+%smaller in comparison to the image counterpart, making it significantly more challenging to learn. 
+Second, regardless of whether good generative models are available,
+manipulating and editing 3D shapes in interactive applications is harder to users than editing images.
+%still a challenging task.
+%interacting with 3D shapes poses additional challenges.
+%In other words, even if we are able to generate high-quality shapes, 
+%manipulating and reasoning about these shapes is still a challenging task.
+For this reason, the geometry processing community has developed techniques for representing
+3D data as a small collection of simpler \emph{proxy shapes}~\cite{ocd, acd, meshsegprim, abstractionshapes, variationalshape, obbcage, bmesh}.
+%These lightweight proxies can be used as stand-ins or \emph{handles} to the original 3D data 
+%for automatic or interactive processes. %\rui{`substitutes' sounds a bit awkward as it doesn't convey that you want the proxy shapes to approximate the original 3D as close as possible} \radomir{what about: can be used to represent the original 3D data...}.
+%\giorgio{then maybe connect sparsity with ease of manipulation?} \tamy{I think the sentence is fine, there is a "or", sometimes handle sets are substitutes, not for visual purpose, but for interaction or simplified simulations.} 
+In this paper, we refer to these light-weight proxies as \emph{shape handles} due to their ability to be easily manipulated by users.
+These representations have been widely used in tasks that require interaction and high-level
+reasoning in 3D environments, such as shape editing~\cite{gsmc_iwires_sig_09, spheremesh}, 
+animation~\cite{animatedsm}, grasping~\cite{graspplaning}, and tracking~\cite{smhandtrack}.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=1.0\linewidth]{imgs/handles.png}
+%\caption{\label{fig:handles} \small
+%\textbf{Different types of handles}.
+%Cuboids, cages~\cite{obbcage}, wires~\cite{gsmc_iwires_sig_09} and sphere-meshes~\cite{spheremesh} are examples of shape handles.
+%They are compact shape representations that were designed to be used
+%in tasks like shape editing, deformation and grasping.}
+%\end{figure}
+
+
+We propose a generative models of shape handles. % that address these challenges.\rui{what challenges?}
+Our method adopts a two-branch network architecture to generate shapes with varying number of handles, where one branch focuses on generating handles while the other predicts the existence of each handle
+(Section~\ref{sec:cardinality}). 
+%Training these branches in an alternating fashion enables us to generate sets with different cardinality. 
+Furthermore, we propose a novel similarity measure based on distance fields to compare shape handle pairs. 
+This measure can be easily adapted to accommodate various type of handles, such as cuboids and sphere-meshes~\cite{spheremesh}
+(Section~\ref{sec:similarity}). 
+Finally, in contrast to previous work~\cite{Tulsiani2017, Paschalidou2019} which focuses on unsupervised methods, we leverage recent works in collecting 3D annotations~\cite{partnet} as well as shape summarization techniques~\cite{spheremesh} to provide supervision to our approach.
+%We demonstrate how we can use pre-computed sets of handles as a supervisory signal through a versatile framework, adaptable to various types of handles and capable of generating sets with varying cardinality.  
+%We note that 3D shapes often possess a rich variation in both number of components and overall topology which is predicted with our network structure.
+%In particular, we use handles extracted from human annotations in the
+%PartNet dataset and sphere-meshes on ShapeNet
+%dataset.
+Experiments show that our method significantly outperforms previous methods
+on shape parsing and generation tasks.
+Using self-supervised training data generated by~\cite{spheremesh}, our approach produces shapes that are twice as accurate as competing approaches in terms of intersection-over-union (IoU) metric. 
+By employing human annotated data, our model can be further improved, achieving even higher accuracy than using self-supervised training data.
+Moreover, as shape handles provide a compact representation, our generative networks are compact (less than 10MB).
+Despite the small memory footprint,
+our method generates a diverse set of
+high quality 3D shapes, as seen in Figure~\ref{fig:bunny}.
+
+Finally, our method is built towards generating shapes using
+representations that are amenable to manipulation by users.
+In contrast to point clouds and other 3D representations such as occupancy grids,
+handles are intuitive to modify and naturally suitable for editing and animation tasks.
+The latent space of shape handles induced by the learned generative model can be leveraged to support shape editing, completion, and interpolation tasks, as depicted in Figure~\ref{fig:handles}.
+
+%Thus, relationships between handles that were previously defined by heuristics, like
+%in~\cite{gsmc_iwires_sig_09}, can be learned directly from data.
+%Additionally, such models can be combined with image encoders to reconstruct
+%shapes directly as sets of handles, or coupled with point cloud or volumetric encoders
+%to perform shape parsing in a single forward pass.
+
+%Despite these benefits, few approaches have
+%explored the use of shape handles as a 3D representation for generative models.
+%This is not surprising: achieving such capabilities requires developing
+%models that can generate sets of objects of varying cardinality. 
+%While previous work has studied generative models for point clouds~\cite{}, %representing each shape as a set of 3D points, 
+%such approaches generally require pre-selecting a fixed number of points. In contrast, approximating shapes as sets of handles needs to %accommodate variable sizes -- a simple shape should be described by
+%a couple of handles, whereas a complex shape requires dozens of handles.
+%Moreover, training a generative model for sets of handles requires
+%a similarity metric that efficiently compares the individual elements. %\rui{again, I suppose you mean defining approximate similarity metric?} -- what is an efficient way
+%of computing similarity between two cylinders? or two triangles? or two curves in 3D? \rui{someone could be reading this and not understanding why it's hard to compare similarity between two cynlinders?}
+%Ideally, we would like this metric to be easily applicable to different type of handles as well.
+
+%\maji{I'd move this paragraph up. The previous two paragraphs sound like related work.}
+%In this paper, we propose a method to learn generative models of shape handles that can address these challenges. %Our method is %adaptable to various types of handles and capable of generating sets with varying cardinality. 
+%In order to generate sets with varying number of handles, we propose a two-branch network architecture where one branch focuses on generating handles while the other predicts the existence of each handle. Training these branches in an alternating fashion enables us to generate sets with different cardinality. Furthermore, we propose a novel similarity measure based on distance fields to compare shape handle pairs. This measure can be easily adapted to various type of handles such as cuboids and \tamy{sphere-meshes}~\cite{spheremesh}. Finally, in contrast to previous work~\cite{Tulsiani2017, Paschalidou2019} which focuses on unsupervised methods, we leverage the recent efforts in 3D annotation tasks as well as the shape summarization techniques~\cite{spheremesh} developed in the graphics community to provide supervision. 
+%We demonstrate how we can use pre-computed sets of handles as a supervisory signal through a versatile framework, adaptable to various types of handles and capable of generating sets with varying cardinality.  
+%We note that 3D shapes often possess a rich variation in both number of components and overall topology which is predicted with our network structure.
+%In particular, we experiment with handles extracted from human annotations in the
+%PartNet~\cite{partnet} dataset and from sphere-meshes computed on ShapeNet~\cite{shapenet}
+%shapes using~\cite{spheremesh}.
+%Our experiments show that our method significantly outperforms previous techniques
+%on shape parsing and generation tasks.
+%Using self-supervision from~\cite{spheremesh} our approach generates shapes \textbf{63\%} more accurate in terms of %intersection-over-union (IOU)
+%than other unsupervised approaches. %\rui{might want to spell out the evaluation metric upfront: is 63\% in terms of IOU or some other metric?}
+%Similarly, by employing human annotations, our approach is capable of generating shape approximations 
+%\textbf{two times} more precise than its unsupervised counterparts.
+%Talk specifically about the results once sec 4 is complete.

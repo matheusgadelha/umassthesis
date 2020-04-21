@@ -1,0 +1,18 @@
+Self-supervision using approximate convex decompositions (ACD) has
+been shown to be effective across multiple tasks and datasets --
+few-shot part segmentation on ShapeNet and shape classification on
+ModelNet, consistently surpassing existing self-supervised and
+unsupervised methods in performance.
+A simple pairwise contrastive loss is sufficient for introducing the
+ACD task into a network training framework, without dependencies on
+any custom architectures or losses.
+
+The method can be easily integrated into existing state-of-the-art
+architectures operating on point clouds such as PointNet++ and DGCNN,
+yielding significant improvements in both cases.
+Extensive ablations and analyses are presented on the approach,
+helping us develop a better intuition about the method.
+Given the demonstrated effectiveness of ACD in self-supervision, this
+opens the door to incorporating other shape decomposition methods from
+the classical geometry processing literature into deep neural network
+based models operating on point clouds.

@@ -1,0 +1,24 @@
+\chapter{Learning Generative Models of Shape Handles}
+
+% \nipsfinalcopy is no longer used
+\begin{figure}[h!]
+\centering
+  %\includegraphics[width=\linewidth]{imgs/genshapes.png}
+  \includegraphics[width=0.32\linewidth]{handles/imgs/airplane-montage.png}
+  \includegraphics[width=0.32\linewidth]{handles/imgs/chair-montage.png}
+  \includegraphics[width=0.32\linewidth]{handles/imgs/chair-montage-sm.png}
+  \caption{\label{fig:bunny} 
+  \textbf{Gallery of 3D shapes generated as sets of handles \emph{(zoom for details)}.}
+  We propose a class of generative models for synthesizing sets of handles --
+  lightweight proxies that can be easily utilized for high-level tasks such as shape editing, parsing, animation etc.
+  Our model can generate sets with different cardinality and is flexible to work with various types of handles, such as sphere-mesh handles~\cite{spheremesh} (first and third figures) and 
+  cuboids (middle figure).
+  }
+ \end{figure}
+
+\input{handles/intro}
+\input{handles/related}
+\input{handles/method}
+\input{handles/experiments}
+\input{handles/conclusion}
+

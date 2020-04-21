@@ -1,0 +1,16 @@
+\section{Conclusion}
+
+We showed that by combining the deep image or volumetric prior with differentiable projection operators, signals can be reconstructed from a few noisy projection measurements using stochastic gradient descent.
+The approach is learning free and can be used as a generic prior.
+Nevertheless, with a relatively simple network architecture our approach outperformed several handcrafted and procedural priors for image based and volumetric reconstruction tasks.
+Although we presented results for tomography and for shape reconstruction from silhouettes and depth maps, the approach can be used whenever the rendering or measurement process is differentiable.
+These include problems such as estimating shape from shading and geometry from multiple shaded images.
+
+A potential issue is the use of volumetric representations for shapes which
+incurs high memory requirements and longer running times.
+A possible line of research is to investigate shape priors for
+more compact 3D representations like point clouds or multi-view.
+Combining deep priors with work on differentiable computer graphics
+pipelines opens up the possibility of applying this approach for
+solving inverse problems in many applications.
+
