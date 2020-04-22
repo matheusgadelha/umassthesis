@@ -75,7 +75,7 @@ The shape parsing task is to compute a small set of primitives from non-parsimon
 raw, 3D representations, like occupancy grids, meshes or point clouds.
 We analyze the ability of our model in performing shape parsing using a similar setup
 to~\cite{Paschalidou2019, Tulsiani2017}.
-Specifically, following the notation defined in Section~\ref{sec:method},
+Specifically, following the notation defined in Section~\ref{hand:method},
 we train a model $f_\theta$ using input-output pairs $\langle x_i, S_i \rangle$, where
 $x_i$ corresponds to a point cloud with 1024 points and $S_i$ is a set of handles
 summarizing the shape represented by $x_i$.
@@ -91,7 +91,7 @@ $g_p$ outputs $N\times D$ values followed by a $\tanh$ activation, while $g_e$
 outputs $N$ values followed by a sigmoid activation.
 We set $N=30$ for cuboid handles and $N=50$ for sphere-meshes. %\duygu{in the previous section we said we used at most 40 vertices?} for sphere-meshes.
 %\matheus{Yes, but the primitives are not vertices, but triangles. So the generated shapes can have at most 50 triangles, the training data can have more than that, but we just not consider the triangles with a smaller volume, just like the cuboids.}
-The model is trained end-to-end by using the alternating training described in Section~\ref{sec:method}.
+The model is trained end-to-end by using the alternating training described in Section~\ref{hand:method}.
 Training is performed using the Adam optimizer with a learning rate of $10^{-3}$ for 5K iterations
 in each stage.
 
@@ -201,7 +201,7 @@ As shown in Figure~\ref{fig:abl} and Table~\ref{tab:abl},
 the proposed handle similarity metric has a significant impact on the quality of the
 generated shapes.
 The second variation consists of training the same model, but without using the alternating procedure
-described in Section~\ref{sec:method}. %, where first $g_p$ is trained by only minimizing $C(z,S)$ and later $g_e$ is trained minimizing the full loss $\mathcal{L}_{rec}$. 
+described in Section~\ref{hand:method}. %, where first $g_p$ is trained by only minimizing $C(z,S)$ and later $g_e$ is trained minimizing the full loss $\mathcal{L}_{rec}$. 
 Figure~\ref{fig:abl} shows that the alternating training procedure generates
 more accurate shapes, with fewer missing parts and better cuboid orientation.
 

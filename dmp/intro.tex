@@ -13,7 +13,7 @@ The goal of this work is to characterize how the choice of the network architect
 impacts the properties of the resulting surfaces.
 We present and analyze a \emph{deep manifold prior}, an approach to represent a
 manifold as a collection of transformations (atlas) of an
-Euclidean space parameterized using deep networks (Section~\ref{sec:method}).
+Euclidean space parameterized using deep networks (Section~\ref{dmp:method}).
 We show that random networks induce smooth surfaces whose limiting
 behavior can be understood in terms of a Gaussian process
 (GP)~\cite{Neal,williams1997computing, cho2009kernel}.
@@ -47,7 +47,7 @@ We show that smooth surfaces are obtained when the parameters of the networks ar
 The approach is also effective for the level-set formulation, where the objective is to learn a deep network that correctly classifies points as \emph{inside} or \emph{outside} the surface.
 However, an advantage of the explicit parametrization is that it does
 not require the notion of what is inside.
-In addition we introduce a \emph{regularization} that reduces self-intersections, overlaps, and distortion of the parametrization, which is desirable for applications such as texture mapping ~(Section~\ref{sec:method}).
+In addition we introduce a \emph{regularization} that reduces self-intersections, overlaps, and distortion of the parametrization, which is desirable for applications such as texture mapping ~(Section~\ref{dmp:method}).
 Our approach requires \emph{no} prior learning, works across a range of 3D
 shapes, and outperforms strong baselines for point cloud denoising, 
 such as Screened Poisson Surface Reconstruction (SPSR) and Robust Implicit Moving Least Squares (RIMLS).
