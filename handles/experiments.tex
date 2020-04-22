@@ -231,7 +231,7 @@ The model is trained using the alternate procedure described before, \ie $\mathc
 \centering
 \includegraphics[width=1.0\linewidth]{handles/imgs/interpolation.png}
 \vspace{-20pt}
-\caption{\label{fig:interp} \small
+\caption{\label{hand:interp} \small
 \textbf{Latent space interpolation}
 Sets of handles can be interpolated by linearly interpolating
 the latent representation $z$.
@@ -245,7 +245,7 @@ Once the VAE model is trained, we are able to morph between two shapes by
 linearly interpolating their latent representations $z$.
 In particular, we sample two values $z_1, z_2$ from $\mathcal{N}(0, I)$ and generate new shapes by passing the interpolated encodings $\alpha z_1 + (1-\alpha) z_2$ through the decoder $g$,
 where $\alpha \in [0, 1]$.
-Results using cuboid handles are presented in Figure~\ref{fig:interp}.
+Results using cuboid handles are presented in Figure~\ref{hand:interp}.
 Note that the shapes are smoothly interpolated, with new handles added and old handles removed as necessary when the overall shape deforms.
 Additionally, relationships between handles, 3.4.4.0.1    Shape editing.like symmetries, adjacency and support, are
 preserved, thanks to the latent space learned by our model, even though such characteristics are never explicitly specified as supervision.

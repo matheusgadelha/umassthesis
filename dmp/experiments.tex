@@ -1,4 +1,4 @@
-\section{Experiments}\label{sec:experiments}
+\section{Experiments}\label{dmp:experiments}
 
 \begin{table}[t]
 \centering
@@ -125,7 +125,7 @@ The results in Table~\ref{tab:ablation} suggest that using multiple parametrizat
 This happens because complex shapes are easier to represent by multiple parametrizations.
 For example, while using a single 2-manifold parametrization, the ring tends to be approximated by a disk, which significantly increases the reconstruction error when
 the points are uniformly sampled over the final mesh.
-This behavior is illustrated in Figure~\ref{fig:interp}.
+This behavior is illustrated in Figure~\ref{dmp:interp}.
 Our ablation studies also indicate that using stretch regularization helps
 parametrizations of both surfaces and contours.
 Figure~\ref{fig:reg} shows the effect of stretch regularization for
@@ -137,7 +137,7 @@ the same regions are being generated multiple times.
 \begin{figure}
 \centering
 \includegraphics[width=0.6\linewidth]{dmp/imgs/interp_rings.pdf}
-    \caption{\label{fig:interp} \small 
+    \caption{\label{dmp:interp} \small 
     \emph{Interpolation results on the top.}
     Stretch regularization ($\lambda=1.0$) helps
     generate smoother surfaces.
@@ -179,7 +179,7 @@ the same regions are being generated multiple times.
 This experiment follows the same experimental setup as denoising.
 However, instead of perturbing the points with Gaussian noise, we randomly select 1K points out of 16K.
 Interpolation is performed by minimizing Equation~\ref{eq:objective}.
-Results can be seen in Figure~\ref{fig:interp}.
+Results can be seen in Figure~\ref{dmp:interp}.
 For these experiments we use a single parameterization and include stretch regularization, without which the surface has holes and significant folds.
 Our method is able to reconstruct reasonable surfaces from a small
 set of points.

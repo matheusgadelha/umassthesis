@@ -52,7 +52,7 @@ Our approach requires \emph{no} prior learning, works across a range of 3D
 shapes, and outperforms strong baselines for point cloud denoising, 
 such as Screened Poisson Surface Reconstruction (SPSR) and Robust Implicit Moving Least Squares (RIMLS).
 It is also more lightweight than approaches that
-operate on volumetric representations of 3D shapes (Section~\ref{sec:experiments}).
+operate on volumetric representations of 3D shapes (Section~\ref{dmp:experiments}).
 
 Our analysis sheds lights on the impressive performance of several
 recently proposed architectures for 3D surface generation, such as
@@ -63,10 +63,10 @@ In particular, AtlasNet generates a 3D shape as a collection of surfaces, each r
 transformation of a unit grid using a fully-connected network.
 However, the generated pieces exhibit significant overlap which
 results in a poor surface reconstruction and is less desirable for
-applying materials and textures to the surface (Section~\ref{sec:experiments}).
+applying materials and textures to the surface (Section~\ref{dmp:experiments}).
 The proposed regularization alleviates this problem. 
 Moreover, by replacing the fully-connected networks of AtlasNet with
 convolutional variants we improve the performance on standard
 benchmarks for shape generation~\cite{choy20163d} with networks that have a
 fraction of the parameters, faster inference time, as well
-as smaller memory footprint (Section~\ref{sec:experiments}).
+as smaller memory footprint (Section~\ref{dmp:experiments}).

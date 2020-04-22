@@ -68,7 +68,7 @@ For each reconstruction we compute the structured similarity (SSIM) index and PS
 
 The standard solution for tomography is Filtered Back Projection (FBP): it inverts the Radon transform using the Fourier slice theorem. When angular sampling rate is low, the reconstruction using FBP turns out to have severe aliasing artifacts as seen in Figure~\ref{fig:ct} third column.
 The TV prior significantly improves the reconstructions for all three images.
-The iterative BM3D approach~\cite{maggioni2013nonlocal} described in Section~\ref{sec:related} was run for 100 iterations. We noticed that the PSNR values converged after 100 iterations with the largest gains in PSNR in the first 20 iterations.
+The iterative BM3D approach~\cite{maggioni2013nonlocal} described in Section~\ref{dsp:related} was run for 100 iterations. We noticed that the PSNR values converged after 100 iterations with the largest gains in PSNR in the first 20 iterations.
 Note that running BM3D on the FBP reconstruction corresponds to one iteration of this approach.
 For the deep prior we obtain results by running $2000$ gradient steps.
 Compared to iterative BM3D, the deep prior produces reconstructions with significantly better SSIM values and comparable or better PSNR values (last two columns in Figure~\ref{fig:ct}).
