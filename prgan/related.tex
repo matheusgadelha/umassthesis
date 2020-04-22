@@ -1,7 +1,8 @@
 \section{Related work}\label{s:related}
-\begin{figure*}
+
+\begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{fig/prgan-arch-fix.pdf}
+\includegraphics[width=\linewidth]{prgan/fig/prgan-arch-fix.pdf}
 \caption{\label{fig:prgan-arch} \emph{The PrGAN architecture for generating
   2D silhouettes of shapes factorized into a 3D shape generator and
   viewpoint generator and projection module.} A 3D voxel representation ($\text{C}
@@ -14,11 +15,10 @@
   channels C in the generated shape is equal to one for an
   occupancy-based representation and is equal to the number of parts
   for a part-based representation.}
+\end{figure}
 
-\end{figure*}
 
-
-\paragraph{Estimating 3D shape from image collections.} 
+\paragraph*{Estimating 3D shape from image collections.} 
 The difficulty of estimating 3D shape can vary widely based on how the
 images are generated and the assumptions one can make about the underlying
 shapes.
@@ -52,7 +52,7 @@ representation of images into shape, viewpoint, and lighting variables
 representation is not explicit, and the approach requires the ability
 to generate training images while varying one factor at a time.
 
-\paragraph{Inferring 3D shape from a single image.} Optimization-based
+\paragraph*{Inferring 3D shape from a single image.} Optimization-based
 approaches put priors on geometry, material, and light to estimate
 all of them by minimizing the reconstruction error when
 rendered~\cite{land1971lightness,barrow1978recovering,BarronTPAMI2015}.
@@ -72,7 +72,7 @@ multiple views of the same object during training.
 
 
 
-\paragraph{Generative models for images and shapes.} Our work builds
+\paragraph*{Generative models for images and shapes.} Our work builds
 on the success of GANs for generating images across a wide range of
 domains~\cite{goodfellow2014generative}. 
 Recently, Wu \etal \cite{wu2016learning} learned a generative model of
@@ -108,7 +108,7 @@ a generative model of 3D shapes from a set of images without viewpoint supervisi
 However, their approach uses a more constrained shape representation -- sets of blocks or deformations
 in a subdivided cube -- and other visual cues such as lighting configuration and normals.
 
-\paragraph{Differentiable renderers.} 
+\paragraph*{Differentiable renderers.} 
 Our generative models rely on a
 differentiable projection module to incorporate image-based supervision.
 Since our images are rendered as silhouettes, the process
@@ -120,6 +120,6 @@ supervision or enable learning from real images.
 These renderers rely on mesh-based or surface-based representations which are
 challenging to generate due to their unstructured nature.
 Recent work on generative models of 3D shapes with point
-clouds~\cite{lin18,mrt,gadelha3d17,psg,atlasnet,latentpc} or multiview~\cite{lun17,tatarchenko2016multi} representations
+clouds~\cite{lin18,mrt,pcagan,psg,atlasnet,latentpc} or multiview~\cite{lun17,tatarchenko2016multi} representations
 provide a possible alternative to our voxel based approach that we aim
 to investigate in the future.

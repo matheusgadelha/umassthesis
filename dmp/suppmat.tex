@@ -1,4 +1,5 @@
-\appendix
+\chapter{Deep Manifold Prior - Supplemental}
+
 \section{Convolutional Parametrizations}
 
 In the main paper, we experimented with fully connected architectures
@@ -33,9 +34,7 @@ worse results than using fully connected networks -- in terms of Chamfer distanc
 
 \begin{figure}[ht!]
     \centering
-    \vspace{-10pt}
-    \includegraphics[width=1.0\linewidth]{imgs/conv_denoising.pdf}
-    \vspace{-20pt}
+    \includegraphics[width=1.0\linewidth]{dmp/imgs/conv_denoising.pdf}
     \caption{\label{fig:rebuttal}\small
     Comparison of Conv and MLP networks for denoising.
     Average error across shapes to the right. Both models use 8
@@ -48,8 +47,7 @@ worse results than using fully connected networks -- in terms of Chamfer distanc
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.9\linewidth]{imgs/data.pdf}
-\vspace{-8pt}
+\includegraphics[width=0.9\linewidth]{dmp/imgs/data.pdf}
 	\caption{\label{fig:data} \small
 	\textbf{Image-to-shape reconstruction results from the test set.} The images shown are the input (black background), our results (32K points, rendered blue), and ground truth (rendered in light green). Qualitatively, our method is able to generate high-resolution point clouds faithfully capturing fine geometric details such as the chair legs, arms, airplane engines, monitor stands etc.}
 	
@@ -72,7 +70,7 @@ a large number of examples (tables, cars, airplanes, chairs). As a result, if av
 \begin{table*}[h!]
 \centering
 {
-\small
+\scriptsize
   \begin{tabular}{l|c|c|c|c|c|c|c|c|c|c|c|c|c||c}
    &  pla. &  ben. &  cab. &  car &  cha. &  mon. &  lam. &  spe. &  fir. &  cou. &  tab. &  cel. &  wat. &  \textbf{mean} \\
   \hline
@@ -133,7 +131,7 @@ For each method 4K points were used to compute the distance. %
   \label{tab:svr}
 \end{table*}
 
-\paragraph{Ablation studies.} Table~\ref{tab:alt} shows a quantitative comparison between a few architectural variations.
+\paragraph*{Ablation studies.} Table~\ref{tab:alt} shows a quantitative comparison between a few architectural variations.
 We start by analyzing a variation of our network that generates the same number of points (using a single decoder) as MRTNet (4K points) and the same image encoder (vgg-16).
 The performance of this variation is 0.05 worse than MRTNet, but it has an order of magnitude less parameters than MRTNet.
 Another variation is to still use a single decoder but generate a higher-resolution point cloud (16K points).
@@ -181,17 +179,17 @@ The number of network parameters are reported in Table~\ref{tab:param}. Even tho
 }
 \end{table}
 
-\paragraph{Qualitative Results.} Figure~\ref{fig:data} shows image-to-shape reconstruction results for images from the test dataset. Overall our method is able to accurately capture fine geometric details such as the chair legs, arms, airplane engines, monitor stands etc. The number of points (32K) is considerably higher than previous work (e.g. 1K by~\cite{fan2016point} and 4K by~\cite{mrt18}). Some specific shapes, such as lamps and jet fighters, present significant challenges for the network as the input images do not contain all the visual details. Nonetheless our method is able to produce a reasonable approximation.
+\paragraph*{Qualitative Results.} Figure~\ref{fig:data} shows image-to-shape reconstruction results for images from the test dataset. Overall our method is able to accurately capture fine geometric details such as the chair legs, arms, airplane engines, monitor stands etc. The number of points (32K) is considerably higher than previous work (e.g. 1K by~\cite{fan2016point} and 4K by~\cite{mrt18}). Some specific shapes, such as lamps and jet fighters, present significant challenges for the network as the input images do not contain all the visual details. Nonetheless our method is able to produce a reasonable approximation.
 
 
-\paragraph{Test on real images.} The test set images are synthetically rendered and as such they look similar to the training images. To evaluate our method on real images we use photos downloaded from the Internet, as shown in~\cite{mrt18}. They are processed by removing the background so only the foreground object remains. Figure~\ref{fig:toy} shows the results. The top row in the figure shows furniture objects, which demonstrate that even though the network is trained using synthetic images rendered with artificial lighting and materials, the model is able to generalize well to real shading, lighting, and materials. The second row shows additional objects where the shading is considerably different from training images. In particular, the last image (desktop computer) is in a category that the training has never seen. Nonetheless the reconstructed shape is reasonable.
+\paragraph*{Test on real images.} The test set images are synthetically rendered and as such they look similar to the training images. To evaluate our method on real images we use photos downloaded from the Internet, as shown in~\cite{mrt18}. They are processed by removing the background so only the foreground object remains. Figure~\ref{fig:toy} shows the results. The top row in the figure shows furniture objects, which demonstrate that even though the network is trained using synthetic images rendered with artificial lighting and materials, the model is able to generalize well to real shading, lighting, and materials. The second row shows additional objects where the shading is considerably different from training images. In particular, the last image (desktop computer) is in a category that the training has never seen. Nonetheless the reconstructed shape is reasonable.
 
 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.9\linewidth]{imgs/furniture.pdf}
-\includegraphics[width=0.9\linewidth]{imgs/toys.pdf}
+\includegraphics[width=0.9\linewidth]{dmp/imgs/furniture.pdf}
+\includegraphics[width=0.9\linewidth]{dmp/imgs/toys.pdf}
 	\caption{\label{fig:toy} \small
 	\textbf{Image-to-shape reconstruction results on Internet photos.} We test our method on real photos downloaded from the Internet and the results are rendered in blue. 
     The test images here are considerably different from the training set. Our method achieves reasonable results with accurate geometric details. The last image (computer) represents a category that has not been seen during training.
@@ -200,14 +198,14 @@ The number of network parameters are reported in Table~\ref{tab:param}. Even tho
 
 \begin{figure*}[h!]
 \centering
-\includegraphics[width=0.8\linewidth]{imgs/corresp.pdf}
+\includegraphics[width=0.8\linewidth]{dmp/imgs/corresp.pdf}
 	\caption{\label{fig:corresp} \small
 	\textbf{Visualizing Shape Correspondences.}
 	Our network learns approximate shape correspondences even though the training is not supervised with such information. The shapes shown here are generated by 32 decoders.
 	}
 \end{figure*}
 
-\paragraph{Shape correspondence.} Once trained, our network learns to generate shapes with corresponding structures.
+\paragraph*{Shape correspondence.} Once trained, our network learns to generate shapes with corresponding structures.
 We demonstrate this with the following experiment.
 First, we randomly select a point cloud generated by our network and call it a reference shape.
 Then, we assign every point in the reference shape a color, where the hue is computed based on the point's distance to the center of gravity of the object.
@@ -244,17 +242,10 @@ From this it follows that $\kappa^2$ is a $\chi^2$ random variable.
 
 
 
-\paragraph{Graph parameterization.}
+\paragraph*{Graph parameterization.}
 
 We also analyze the case where the curve is the graph of a one-dimensional function, i.e., $x=x$,$y=f(x)$. 
 In this case the curvature can be written as $\kappa=\ddot{f}/((1+\dot{f}^2)^\frac{3}{2})$. 
 Once again all the derivatives $\dot{f}$ and $\ddot{f}$ are Gaussian random variables. 
 Assume that $(\dot{f}, \ddot{f})$ are distributed according to $N(0,\Sigma)$. Here $\Sigma = [\sigma_{\dot{f},\dot{f}}, \sigma_{\dot{f}\ddot{f}}; \sigma_{\dot{f}\ddot{f}}, \sigma_{\ddot{f}\ddot{f}} ]$ denoting the joint covariance distribution.
 Applying the delta method with $g(a, b) = b/(1+a^2)^{3/2}$, we get that $k$ is distributed as a Gaussian random variable $N(0, \nabla g^T \Sigma \nabla g)$. Since $\nabla g(a, b) |_{0,0} = [0, 1]$, we have $k \rightarrow N(0, \sigma_{\ddot{f}\ddot{f}})$.
-
-
-{\small
-\bibliographystyle{ieee_fullname}
-\bibliography{egbib,mrnet}
-}
-\end{document}

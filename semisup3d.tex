@@ -1,0 +1,73 @@
+\chapter{Single-view Multi-object Reconstruction}
+
+Throughout this thesis we explored multiple techniques for 3D shape understanding
+and generation.
+We investigated the use of multiple 3D representations under different amounts and types of supervision for training deep learning models.
+Even though those techniques show promising results in multiple tasks, their
+utilization in the real world is constrained by several limitations.
+First, we explored mainly object-centric models.
+If we want to achieve the ultimate goal of creating agents capable of understanding
+and interacting with the real world, our models need to be capable of
+reasoning in the scene level -- perceiving environments as a set of multiple
+objects and their respective poses.
+Second, as we discussed in the last chapter, we are able to train 3D generative
+models by leveraging only image data, 
+but the results are limited in terms of shape details and
+constrained by assumptions regarding pose and type of
+supervision -- sihouettes or part segmentations of single objects.
+
+In the last part of this thesis, we will focus on bringing some of the techniques closer
+to real world applications by investigating their use in more realistic setups.
+At this point, it is quite clear that many models are able to perform single view reconstruction
+from RGB images on the ShapeNet~\cite{shapenet} benchmark.
+However, there is a significant domain gap between ShapeNet renderings and images of objects
+in the wild -- besides the simplified illumination model and non-realistic renderings, reconstruction
+benchmarks using ShapeNet assume the existence of foreground segmentation.
+Moreover, as discussed previously, reconstructing a single object per image is not a realistic setup:
+there are likely many objects in the same scene, oftenly interacting and occluding each other.
+We want to build systems that are capable of reasoning about this behavior.
+In this proposal, which will comprise the last chapter of this thesis, we
+plan to address some of these issues in the context of 3D reconstruction from a
+single RGB image.
+More precisely, our goal is to develop a model that can perform multi-object 3D reconstruction from a single view.
+However, since we are inherently limited by the amount of 3D data, we plan to explore some of the tools developed so far and perform training from multiple supervision modalities: object-centric 3D supervision (\eg ShapeNet~\cite{shapenet}), scene-centric 3D supervision (\eg Pix3D~\cite{pix3d}), image-level supervision in the form of semantic segmentation (using techniques from Chapter 7) and object pose annotation.
+We believe this training setup is more aligned to what we find in the real world.
+Learning only from images (like we did in the previous chapter) is a desired capability,
+but in reality we have some amount of 3D supervision and, to a bigger extent, image-level annotations
+in the form of pose, keypoints or semantic segmentation masks.
+We hypothesize that training a model using those multiple sources of supervision will allow us
+to train more robust models capable of dealing with more realistic datasets.
+
+\section{Work plan}
+Next, we list the tasks to do and expected outcomes as follows:
+\begin{itemize}
+    \item \textbf{Object-centric reconstruction ``in-the-wild".} Even though
+    there are multiple approaches performing 3D reconstruction of single objects
+    from RGB images~\cite{mrt18,atlasnet,psg,choy20163d}, they are usually focused
+    on the unrealistic setting where the object of interested is perfectly centered in the input image and segmented from the background.
+    Our goal for this part of the work is to have a model capable of reconstructing 3D shapes and predicting pose from images without foreground segmentation trained using synthetic data from ShapeNet and
+    real data from Pix3D.
+    
+    \item \textbf{Image-level supervision.} When 3D data for objects is not available, models can be trained using foreground/background segmentation (silhouettes) or semantic masks. The goal is to answer the following question: what are efficient architectures and
+    training strategies that allow fine-tuning 3D reconstruction models
+    using image-level supervision?
+    
+    \item \textbf{Multi-object reconstruction.} The previous steps concern
+    building single-object reconstruction modules. In the end, we want to use
+    these networks as building blocks to perform reconstruction of multiple
+    objects given a single RGB image. A possible solution is to use
+    object detection architectures to turn single image multi-object reconstruction into single-image single-object reconstruction.
+    This task is not trivial.
+    We probably want to train the whole system end-to-end so that reconstruction can benefit
+    from the broader image context.
+    Besides, the object reconstruction module now has to deal with occlusions from another objects,
+    which did not happen in the object-centric case.
+    Investigating strategies to deal with these issues is one of the goals of the project.
+    Additionally, an interesting alternative to utilize traditional object detection architectures is to modify recently proposed single-stage
+    object detectors~\cite{objaspts,cornernet} to regress latent 3D representations instead of
+    axis-aligned bounding boxes.
+
+    \item \textbf{CVPR 2021 submission.} November 2020.
+    
+    \item \textbf{Thesis defense.} December 2020.
+\end{itemize}

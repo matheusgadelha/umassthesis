@@ -13,7 +13,7 @@ and PyTorch.
 Computation was performed on TitanX GPUs.
 
 \subsection{Datasets}
-\paragraph{Cuboids from PartNet~\cite{partnet}.}
+\paragraph*{Cuboids from PartNet~\cite{partnet}.}
 We experiment with human annotated handles by fitting cuboids to the parts
 segmented in PartNet~\cite{partnet}.
 The dataset contains 26,671 shapes from 24 categories and 573,585 part instances.
@@ -28,7 +28,7 @@ Notice that 92\% of the shapes have less than 30 cuboids, so those remain unchan
 The others will have missing components, but those usually correspond to very small details
 and can be ignored without degrading the overall structure.
 
-\paragraph{Sphere-meshes from ShapeNet~\cite{shapenet}.}
+\paragraph*{Sphere-meshes from ShapeNet~\cite{shapenet}.}
 In contrast to cuboids (which are computed from human annotated parts), we compute sphere-meshes fully automatically using the procedure
 described in~\cite{spheremesh}.
 %This means that we can apply this representation to any mesh repository and generate training data for our model.
@@ -132,7 +132,7 @@ on the reconstructed shapes. The best self-supervised results are shown in bold 
 }
 \end{table}
 
-\paragraph{Quantitative comparisons}
+\paragraph*{Quantitative evaluation.}
 
 We compare our method against~\cite{Tulsiani2017, Paschalidou2019} using intersection
 over union (IoU) metric and results are shown in Table~\ref{tab:parse}.
